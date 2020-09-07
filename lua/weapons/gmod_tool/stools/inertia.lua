@@ -286,6 +286,23 @@ if CLIENT then
         mat:Translate(Vector(pos.x, pos.y))
         mat:Scale(Vector(1, 1, 1) * ply:GetInfoNum("inertia_tooltipscale", 1) / 2)
         mat:Translate(-Vector(pos.x, pos.y))
+
+        cam.Start3D()
+            render.SetMaterial(Material("cable/red"))
+            render.DrawBeam(ent:GetPos(), ent:LocalToWorld(Vector(25, 0, 0)), 0.5, 0, 1)
+            render.SetMaterial(Material("cable/green"))
+            render.DrawBeam(ent:GetPos(), ent:LocalToWorld(Vector(0, 25, 0)), 0.5, 0, 1)
+            render.SetMaterial(Material("cable/blue"))
+            render.DrawBeam(ent:GetPos(), ent:LocalToWorld(Vector(0, 0, 25)), 0.5, 0, 1)
+        cam.End3D()
+
+        local x = ent:LocalToWorld(Vector(27, 0, 0)):ToScreen()
+        local y = ent:LocalToWorld(Vector(0, 27, 0)):ToScreen()
+        local z = ent:LocalToWorld(Vector(0, 0, 27)):ToScreen()
+        draw.SimpleTextOutlined("X", "DermaLarge", x.x, x.y, Color(255, 0, 0), 1, 1, 1, Color(0, 0, 0))
+        draw.SimpleTextOutlined("Y", "DermaLarge", y.x, y.y, Color(0, 255, 0), 1, 1, 1, Color(0, 0, 0))
+        draw.SimpleTextOutlined("Z", "DermaLarge", z.x, z.y, Color(0, 0, 255), 1, 1, 1, Color(0, 0, 0))
+
         cam.PushModelMatrix(mat)
             surface.DrawRect(pos.x - w / 2, pos.y - h, w, h)
             draw.DrawText(str, "InertiaFont", pos.x, pos.y - h, Color(255, 255, 255), 1)
