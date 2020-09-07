@@ -3,6 +3,8 @@ A tool that lets you set the rotational inertia of entities independent of their
 
 For more information on inertia, [go here.](https://en.wikipedia.org/wiki/Moment_of_inertia)
 
+For the workshop page, [go here.](https://steamcommunity.com/sharedfiles/filedetails/?id=2222041334)
+
 # Q&A:
 
 ### Isn't this the same as E:propInertia(V) in E2/Starfall?
