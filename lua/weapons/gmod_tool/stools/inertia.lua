@@ -136,12 +136,12 @@ function TOOL:LeftClick(trace)
 
         if self:GetClientInfo("mode") == "direct" then
             setInertia(self:GetOwner(), trace.Entity, {
-                inertia = vClamp(inertia, 0.1, 100000000),
+                inertia = vClamp(inertia, 0.001, 100000000),
                 defaultInertia = trace.Entity.defaultInertia
             })
         else
             setInertia(self:GetOwner(), trace.Entity, {
-                inertia = vClamp(trace.Entity.defaultInertia * inertia * trace.Entity:GetPhysicsObject():GetMass(), 0.1, 100000000),
+                inertia = vClamp(trace.Entity.defaultInertia * inertia * trace.Entity:GetPhysicsObject():GetMass(), 0.001, 100000000),
                 defaultInertia = trace.Entity.defaultInertia
             })
         end
