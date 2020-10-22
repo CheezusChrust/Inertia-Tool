@@ -49,9 +49,9 @@ function entityMeta:SetNWVectorPrecise(key, value)
 end
 
 function entityMeta:GetNWVectorPrecise(key, fallback)
-    local x = self:GetNWFloat(key .. "_x", fallback)
-    local y = self:GetNWFloat(key .. "_y", fallback)
-    local z = self:GetNWFloat(key .. "_z", fallback)
+    local x = self:GetNWFloat(key .. "_x", fallback[1])
+    local y = self:GetNWFloat(key .. "_y", fallback[2])
+    local z = self:GetNWFloat(key .. "_z", fallback[3])
 
     return Vector(x, y, z)
 end
