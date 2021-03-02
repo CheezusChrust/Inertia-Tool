@@ -138,7 +138,7 @@ function PHYSOBJ:SetMass(...)
 
     if self:GetEntity().inertiaLock then
         self:SetInertia(self:GetEntity().inertiaLock)
-    else
+    elseif self:GetEntity().EntityMods and self:GetEntity().EntityMods.inertia then
         setInertia(nil, self:GetEntity(), {
             inertia = self:GetInertia(),
             defaultInertia = self:GetEntity().defaultInertia
