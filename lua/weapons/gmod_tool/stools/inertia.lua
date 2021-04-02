@@ -307,11 +307,13 @@ end
 if CLIENT then
     cvars.RemoveChangeCallback("inertia_xyz", "inertia_changecallback")
 
-    cvars.AddChangeCallback("inertia_xyz", function(_, _, newValue)
-        LocalPlayer():ConCommand("inertia_x " .. newValue)
-        LocalPlayer():ConCommand("inertia_y " .. newValue)
-        LocalPlayer():ConCommand("inertia_z " .. newValue)
-    end, "inertia_changecallback")
+    hook.Add("InitPostEntity", "inertia::clientload", function()
+        cvars.AddChangeCallback("inertia_xyz", function(_, _, newValue)
+            LocalPlayer():ConCommand("inertia_x " .. newValue)
+            LocalPlayer():ConCommand("inertia_y " .. newValue)
+            LocalPlayer():ConCommand("inertia_z " .. newValue)
+        end, "inertia_changecallback")
+    end)
 
     surface.CreateFont("InertiaFont", {
         font = "coolvetica",
