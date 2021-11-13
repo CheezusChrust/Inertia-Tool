@@ -136,14 +136,16 @@ PHYSOBJ.OldSetMass = PHYSOBJ.SetMass
 function PHYSOBJ:SetMass(...)
     self:OldSetMass(...)
 
-    if self:GetEntity().inertiaLock then
-        self:SetInertia(self:GetEntity().inertiaLock)
-    elseif self:GetEntity().EntityMods and self:GetEntity().EntityMods.inertia then
-        setInertia(nil, self:GetEntity(), {
-            inertia = self:GetInertia(),
-            defaultInertia = self:GetEntity().defaultInertia
-        })
-    end
+    timer.Simple(0, function()
+        if self:GetEntity().inertiaLock then
+            self:SetInertia(self:GetEntity().inertiaLock)
+        elseif self:GetEntity().EntityMods and self:GetEntity().EntityMods.inertia then
+            setInertia(nil, self:GetEntity(), {
+                inertia = self:GetInertia(),
+                defaultInertia = self:GetEntity().defaultInertia
+            })
+        end
+    end)
 end
 
 function TOOL:Think()
