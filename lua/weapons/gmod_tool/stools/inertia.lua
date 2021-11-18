@@ -129,6 +129,20 @@ if SERVER then
 
         return ret
     end
+
+    if PHYSOBJ.OldSetInertia then
+        PHYSOBJ.SetInertia = PHYSOBJ.OldSetInertia
+    end
+
+    PHYSOBJ.OldSetInertia = PHYSOBJ.SetInertia
+
+    function PHYSOBJ:SetInertia(v)
+        if not self:GetEntity().defaultInertia then
+            self:GetEntity().defaultInertia = self:GetInertia() / self:GetMass()
+        end
+
+        self:OldSetInertia(v)
+    end
 end
 
 function TOOL:Think()
@@ -186,8 +200,8 @@ function TOOL:RightClick(trace)
     if not isReallyValid(trace.Entity) then return false end
 
     if SERVER then
-        local finalInertia = trace.Entity:GetPhysicsObject():GetInertia() --self:GetOwner():GetNWVectorPrecise("Inertia", Vector(1, 1, 1))
-        local defaultInertia = trace.Entity.defaultInertia * trace.Entity:GetPhysicsObject():GetMass() --trace.Entity:GetNWVectorPrecise("DefaultInertia", Vector(1, 1, 1)) * trace.Entity:GetPhysicsObject():GetMass()
+        local finalInertia = trace.Entity:GetPhysicsObject():GetInertia()
+        local defaultInertia = trace.Entity.defaultInertia and (trace.Entity.defaultInertia * trace.Entity:GetPhysicsObject():GetMass()) or finalInertia
 
         --Return the inertia multiplier instead of raw inertia values if using mode 2
         if self:GetClientInfo("mode") == "multiplier" then
