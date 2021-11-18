@@ -105,6 +105,10 @@ if SERVER then
     function ENTITY:PhysicsInitSphere(...)
         local ret = self:OldPhysicsInitSphere(...)
 
+        if self.defaultInertia then
+            self.defaultInertia = self:GetPhysicsObject():GetInertia() / self:GetPhysicsObject():GetMass()
+        end
+
         if self.setInertia then
             self:GetPhysicsObject():SetInertia(self.setInertia * self:GetPhysicsObject():GetMass())
         end
@@ -351,22 +355,28 @@ if CLIENT then
         if GetConVar("inertia_mode"):GetString() == "multiplier" then
             local v1 = ply:GetNWVectorPrecise("Inertia", Vector())
             local v2 = ply:GetNWVectorPrecise("DefaultInertia", Vector()) * ply:GetNWFloat("InertiaTool::Mass")
+
             if v1:Length() > 4294967295 then
                 v1 = Vector()
             end
             if v2:Length() > 4294967295 then
                 v2 = Vector()
             end
-            str = "Current: [" .. math.Round(v1.x / v2.x, 2) .. "x, " .. math.Round(v1.y / v2.y, 2) .. "x, " .. math.Round(v1.z / v2.z, 2) .. "x]"
+
+            str = "Current: [" .. (v1 == Vector() and "Unknown]" or math.Round(v1.x / v2.x, 2) .. "x, " .. math.Round(v1.y / v2.y, 2) .. "x, " .. math.Round(v1.z / v2.z, 2) .. "x]")
         else
             local v = ply:GetNWVectorPrecise("Inertia", Vector())
             if v:Length() > 4294967295 then
                 v = Vector()
             end
-            str = "Current: " .. matrixToString(v)
+
+            str = "Current: " .. (v == Vector() and "[Unknown]" or matrixToString(v))
         end
 
-        local str2 = "Default: " .. matrixToString(ply:GetNWVectorPrecise("DefaultInertia", Vector()) * ply:GetNWFloat("InertiaTool::Mass"))
+        local default = ply:GetNWVectorPrecise("DefaultInertia", Vector()) * ply:GetNWFloat("InertiaTool::Mass")
+        default = default:Length() > 4294967295 and Vector() or default
+
+        local str2 = "Default: " .. (default == Vector() and "[Unknown]" or matrixToString(default))
         surface.SetFont("InertiaFont")
         local w, h = surface.GetTextSize(str)
         local w2, _ = surface.GetTextSize(str2)
