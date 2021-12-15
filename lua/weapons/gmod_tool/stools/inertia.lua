@@ -56,11 +56,26 @@ function ENTITY:GetNWVectorPrecise(key, fallback)
     return Vector(x, y, z)
 end
 
+local blacklist = {
+    "func_",
+    "npc_"
+}
+
 local function isReallyValid(ent)
     if not IsValid(ent) then return false end
     if not ent:IsValid() then return false end
     if ent:IsWorld() then return false end
-    if ent:GetClass() ~= "prop_physics" then return false end
+    --if ent:GetClass() ~= "prop_physics" then return false end
+
+    local class = ent:GetClass()
+    for _, v in pairs(blacklist) do
+        if string.find(class, v) then return false end
+    end
+
+    if CPPI then
+        if not ent:CPPIGetOwner() then return false end
+        if not ent:CPPIGetOwner():IsValid() then return false end
+    end
 
     if SERVER and not ent:GetPhysicsObject():IsValid() then return false end
 
